@@ -1,0 +1,415 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+ <title>TIC TAC TOE + AI</title>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ </head>
+
+<body>
+  <br>
+  <br>
+  <br>
+  <a href="https://www.instagram.com/sharad_maddheshiya_5/?hl=en"><strong> Created by:  SHARAD MADDHESHIYA </strong></a>
+	<div class="container">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>X</th>
+					<th>Turn</th>
+					<th>0</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><span id="xScore">0</span></td>
+					<td id="header">X</td>
+					<td><span id="oScore">0</span></td>
+
+				</tr>
+			</tbody>
+		</table>
+		<div class="square">
+			<div class="content" onclick="move(this,0,0)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,0,1)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,0,2)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,1,0)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,1,1)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,1,2)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,2,0)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,2,1)"></div>
+		</div>
+		<div class="square">
+			<div class="content" onclick="move(this,2,2)"></div>
+		</div>
+
+		
+		<div>
+		<button id="AI"class="btn btn-info"  onclick="TWO()">TWO PLAYERS ?</button>
+		</div>
+      
+		<div class="panel panel-default" style="margin-top: 10px">
+		
+		</div>
+		<div>
+			<button id="newGame" class="btn btn-info" onclick="startNewGame()">NEW GAME</button>
+
+		</div>
+
+	</div>
+
+	<script >
+		var turn="X";
+		var next="O";
+		var isOver=false;
+		var header=document.getElementById("header");
+		var xScore=document.getElementById("xScore");
+		var oScore=document.getElementById("oScore");
+		var elements = document.getElementsByClassName("content");
+        document.getElementById("newGame").style.visibility = "hidden";
+        var ai=true;
+	    
+	</script>
+        <script>
+          
+          
+function TWO(){
+ myVib();sound();
+  ai=!ai;
+  if(ai==false){
+ document.getElementById("AI").innerHTML="AI ?";
+    xScore.innerHTML=0;
+    oScore.innerHTML=0;
+ startNewGame();
+ 
+  }else{
+    document.getElementById("AI").innerHTML="TWO PLAYERS ?";
+        xScore.innerHTML=0;
+    oScore.innerHTML=0;
+    resetBoard();
+    startNewGame();
+  }
+  
+  
+}
+
+function move(e,x,y) {
+ myVib();sound();
+    if (e.innerHTML === "") {
+      e.innerHTML=turn;
+      turn=next;
+      next=e.innerHTML;
+      header.innerHTML=turn;
+  
+  
+    if(ai){
+       header.innerHTML="X";
+     e.innerHTML = "X";  
+    box[x][y]="X";
+    aiTurn();
+     isGameOver();
+    
+  }else{
+
+isGameOver();
+  
+  }
+
+}  
+  
+ }
+  
+ function GameOver(){
+
+        return(HasWon("X")||HasWon("O")||getAvailableBoxes()==[]);
+ }
+
+  function isGameOver(){
+     myVib();sound();
+  var result = null;
+      if (!isOver) {
+          result = decision();
+      switch(result){
+        case "draw":
+        isOver = true;
+          document.getElementById("newGame").style.visibility = "visible";
+          
+          break;
+        case "X":
+          xScore.innerHTML++;
+          isOver = true;
+          document.getElementById("newGame").style.visibility = "visible";
+          break;
+        case "O":
+         oScore.innerHTML++;
+          isOver = true;
+          document.getElementById("newGame").style.visibility = "visible";
+          break;
+      }
+      
+    }
+
+  }
+
+   function aiTurn(){
+   
+    var p=findBestMove();
+    var count=0;
+    for (var i = 0; i < 3; i++) {
+      for (var j= 0; j < 3; j++) {
+       
+        if(p.x==i && p.y==j){
+          
+          elements[count].innerHTML ="O";
+          box[i][j]="O";
+         
+        }
+        count++;
+
+        
+      }
+    }
+  }
+
+
+  function decision() {
+    
+  for (var i = 0; i < 9; i+=3) {
+  	if(elements[i].innerHTML!==""&&elements[i].innerHTML==elements[i+1].innerHTML&&elements[i].innerHTML==elements[i+2].innerHTML){
+  		colorBackground(elements[i]);
+        colorBackground(elements[i+1]);
+        colorBackground(elements[i+2]);
+        return elements[i].innerHTML;
+  	}
+
+  }
+
+ 
+  for (var i = 0; i < 3; i++) {
+  		if(elements[i].innerHTML!==""&&elements[i].innerHTML==elements[i+3].innerHTML&&elements[i].innerHTML==elements[i+6].innerHTML){
+  		colorBackground(elements[i]);
+        colorBackground(elements[i+3]);
+        colorBackground(elements[i+6]);
+        return elements[i].innerHTML;
+  	}
+
+
+  }
+  var b0=elements[0].innerHTML;
+  var b2=elements[2].innerHTML;
+  var b4=elements[4].innerHTML;
+  var b6=elements[6].innerHTML;
+  var b8=elements[8].innerHTML;
+   
+    if(b0!==""&&b0==b4&&b4==b8){
+		colorBackground(elements[0]);
+        colorBackground(elements[4]);
+        colorBackground(elements[8]);
+		return b0;
+	}else if(b2!==""&&b2==b4&&b4==b6){
+		colorBackground(elements[2]);
+        colorBackground(elements[4]);
+        colorBackground(elements[6]);
+		return b2;
+	}
+	var filled=0;
+	for (var i = 0; i < elements.length; i++) {
+		if(elements[i].innerHTML=="X" || elements[i].innerHTML=="O"){
+			filled++;
+
+		}
+		if(filled==9){
+			return "draw";
+		}
+	}
+	return false;
+}
+
+
+
+  
+  function colorBackground(el) {
+      el.style.backgroundColor = "#00ff00";
+  }
+  
+  function startNewGame() {
+     myVib();sound();
+   resetBoard();
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].innerHTML = "";
+      elements[i].style.backgroundColor = "black";
+    }
+    turn = "X";
+    next = "O";
+    header.innerHTML = turn;
+    isOver = false;
+    document.getElementById("newGame").style.visibility = "hidden";
+  }
+  
+
+  
+  var box=new Array(3);
+        for (i=0; i <3; i++) {         
+         box[i]=new Array(3) 
+ }
+
+   function placeElement(p,s){
+        box[p.x][p.y]=s;
+    }
+   function remove(p){
+        box[p.x][p.y]=null;
+
+    }
+   function resetBoard() {
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                box[i][j]=null;
+            }
+        }
+    }
+function HasWon(s){
+        if((box[0][0]==box[1][1]&&box[1][1]==box[2][2]&&box[2][2]==s)||(box[0][2]==box[1][1]&&box[1][1]==box[2][0]&&box[2][0]==s))
+        { return true;}
+        for(var i=0;i<box.length;i++){
+            if(box[i][0]==box[i][1]&&box[i][1]==box[i][2]&&box[i][2]==s||box[0][i]==box[1][i]&&box[1][i]==box[2][i]&&box[2][i]==s){
+
+                return true; }
+        }
+
+        return false;
+
+    }
+
+
+  function getAvailableBoxes(){
+   var availableBoxes=[];
+   
+   for (var i = 0; i < 3; i++) {
+     for (var j = 0; j < 3 ;j++) {
+      
+         if(box[i][j]==null){
+          availableBoxes.push({
+            x:i,
+        y:j
+        });
+
+         }
+    
+     
+   }
+    
+  }
+  return availableBoxes;
+}
+
+
+   function minimax(depth,isMax){
+    var boxAvailable=getAvailableBoxes();
+      if(boxAvailable.length==0){return 0;}
+
+     if(HasWon("X")){return -1;}
+     if(HasWon("O")){return 1;}
+     
+    var max=Number.MIN_SAFE_INTEGER;
+    var min=Number.MAX_SAFE_INTEGER;
+
+    if(isMax){
+      for (var i = 0; i < boxAvailable.length; i++) {
+        placeElement(boxAvailable[i],"O");
+
+                max=Math.max(minimax(depth+1,!isMax),max);
+                remove(boxAvailable[i]);
+      }
+
+    }else{
+      for (var i = 0; i < boxAvailable.length; i++) {
+       placeElement(boxAvailable[i],"X");
+                min=Math.min(minimax(depth+1,!isMax),min);
+                remove(boxAvailable[i]);
+      }
+
+    }
+    return isMax?max+depth:min;
+
+  }
+
+   function findBestMove(){
+    var A=[];
+    var leftBoxes=getAvailableBoxes();
+    var bestVal=Number.MIN_SAFE_INTEGER;
+    for (var i = 0; i < leftBoxes.length; i++) {
+     placeElement(leftBoxes[i],"O");
+
+      var moveVal=minimax(0,false);
+      if(moveVal>bestVal){A=leftBoxes[i]}
+      bestVal=Math.max(moveVal,bestVal);
+      remove(leftBoxes[i]);
+
+    }
+
+    return A;
+
+  }
+ 
+ function sound(){var click = new Audio("https://sndup.net/8njh/bubbles.mp3");
+click.play();
+ 
+ }
+ function myVib(){ navigator.vibrate(100);
+}
+    function vibrato(s){ navigator.vibrate(s) ;
+          }
+         
+  </script>
+  <style>
+    .square {
+    float:left;
+    position: relative;
+    width:30%;
+    padding-bottom:30%; /* it equals width for a 1:1 aspect ratio */
+    margin:1.66%;
+    background-color:black;
+}
+
+.content {
+    position:absolute;
+    height:100%;
+    width:100%;
+    font-size:19.0vw;
+    color: white;
+
+}
+
+body {
+    color:#000;
+    text-align:center;
+    background:#ECECEC;
+}
+
+th, td {
+    text-align:center;
+
+}
+  </style>
+
+ </body>
+ 
+
+</html>
