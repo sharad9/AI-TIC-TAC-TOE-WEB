@@ -91,7 +91,7 @@
           
           
 function TWO(){
- myVib();sound();
+ myVib();
   ai=!ai;
   if(ai==false){
  document.getElementById("AI").innerHTML="AI ?";
@@ -111,7 +111,7 @@ function TWO(){
 }
 
 function move(e,x,y) {
- myVib();sound();
+ myVib();sound2();
     if (e.innerHTML === "") {
       e.innerHTML=turn;
       turn=next;
@@ -142,7 +142,7 @@ isGameOver();
  }
 
   function isGameOver(){
-     myVib();sound();
+     
   var result = null;
       if (!isOver) {
           result = decision();
@@ -322,11 +322,13 @@ function HasWon(s){
 
    function minimax(depth,isMax){
     var boxAvailable=getAvailableBoxes();
-      if(boxAvailable.length==0){return 0;}
+      
 
-     if(HasWon("X")){return -1;}
+     
      if(HasWon("O")){return 1;}
      
+     if(HasWon("X")){return -1;}
+     if(boxAvailable.length==0){return 0;}
     var max=Number.MIN_SAFE_INTEGER;
     var min=Number.MAX_SAFE_INTEGER;
 
@@ -368,10 +370,14 @@ function HasWon(s){
 
   }
  
- function sound(){var click = new Audio("https://sndup.net/8njh/bubbles.mp3");
+ function sound(){var click = new Audio("https://sndup.net/3z25/glimmer.mp3");
 click.play();
  
  }
+  function sound2(){var click = new Audio("https://sndup.net/8njh/bubbles.mp3");
+ click.play();
+ }
+          
  function myVib(){ navigator.vibrate(100);
 }
     function vibrato(s){ navigator.vibrate(s) ;
